@@ -18,22 +18,21 @@ const Home = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const currentTheme = createTheme(isDarkMode ? darkTheme : lightTheme);
   const isMediumScreen = useMediaQuery(currentTheme.breakpoints.up('md'));
-  const { chats, setChats, toggleDrawer, getResponse,setHistoryChats } = useOutletContext();
+  const { chats, setChats, toggleDrawer, getResponse, setHistoryChats } = useOutletContext();
 
   const listRef = useRef(null);
   const [scroll, setScroll] = useState(false);
-  
+
   const [inputVal, setInputVal] = useState('');
 
   const handleInputChange = (e) => {
 
     setInputVal(e.target.value);
 
-    
+
   }
 
   const handleOnClick = () => {
-
 
     const response = getResponse(inputVal);
 
@@ -51,39 +50,36 @@ const Home = () => {
         id: uuidv4(),
         time: new Date(),
       },
-    
+
     ]));
-
-    
-    setScroll(prev => !prev);
-
     setInputVal('');
-
-    
   }
 
-  const handleHistoryChats = ()=>{
+
+  const handleHistoryChats = () => {
     const newChatHistoryEntry = {
-     
-      messages: chats, 
+
+      messages: chats,
       timestamp: new Date().toISOString(),
-  };
-  setHistoryChats((prev) => [newChatHistoryEntry, ...prev]);
+    };
+    setHistoryChats((prev) => [newChatHistoryEntry, ...prev]);
     setChats([]);
   }
 
-  useEffect(()=>{
-    listRef.current?.lastElementChild?.scrollIntoView();
-  },[scroll])
+  useEffect(() => {
+    listRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+  }, [scroll]);
 
-
+  useEffect(() => {
+    setScroll(prev => !prev);
+  }, [chats])
   return (
     <div>
       <Stack
         direction="column"
         justifyContent="space-between"
         spacing={2}
-        sx={{ height: '100vh',padding: '1rem' }} position='static'>
+        sx={{ height: '100vh', padding: '1rem' }} position='static'>
 
         <AppBar sx={{ background: 'inherit', border: 'none' }} position='static'>
 
@@ -97,7 +93,7 @@ const Home = () => {
             {!isMediumScreen && (
               <MenuIcon sx={{ color: currentTheme.palette.primary.main, marginTop: '0.5rem', fontWeight: '700' }} onClick={toggleDrawer(true)} />
             )}
-            <Typography sx={{margin:'0.5rem'}} variant='h1'>Boat AI</Typography>
+            <Typography sx={{ margin: '0.5rem' }} variant='h1'>Boat AI</Typography>
 
             {isDarkMode ? <Button onClick={toggleTheme}><DarkModeIcon /></Button> : <Button onClick={toggleTheme}><LightModeIcon /></Button>}
           </Stack>
@@ -111,68 +107,71 @@ const Home = () => {
         </Box>}
 
         {
-          chats.length > 0 && <Stack sx={{marginTop: '2rem'}} spacing={3}>
+          chats.length > 0 && <Stack ref={listRef} sx={{ marginTop: '2rem' }} spacing={3}>
             {
-              chats.map((ch)=>(
+              chats.map((ch) => (
 
-                <ChattingCards updateChat={setChats} key={ch.id} chat={ch}/>
+                <ChattingCards updateChat={setChats} key={ch.id} chat={ch} />
               ))
             }
-           
+
           </Stack>
         }
 
 
-<Box 
-      sx={{ 
-        display: 'flex', 
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        width: '100%',
-        margin: '1rem 0'
-      }}
-    >
-      <TextField 
-        sx={{ 
-          flexGrow: 1, 
-          marginRight: '0.5rem' 
-        }} 
-        onChange={handleInputChange} 
-        id='question-input' 
-        value={inputVal} 
-        label='Message to Bot' 
-        variant="outlined" 
-      />
-      
-      <Button 
-        onClick={handleOnClick} 
-        disabled={!inputVal} 
-        sx={{ 
-          bgcolor: 'secondary.main', 
-          marginLeft: '0.2rem', 
-          width: '4rem' 
-        }}
-      >
-        <Typography variant='body1'>Ask</Typography>
-      </Button>
-      
-      <Button 
-      onClick={handleHistoryChats}
-        sx={{ 
-          bgcolor: 'secondary.main', 
-          marginLeft: '0.2rem', 
-          width: '4rem' 
-        }}
-      >
-        <Typography variant='body1'>Save</Typography>
-      </Button>
-    </Box>
+        <Box
+        ref={listRef}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            margin: '1rem',
+            marginBottom:'3rem'
+          }}
+        >
+          <TextField
+            sx={{
+              flexGrow: 1,
+              margin: '0.5rem'
+              
+            }}
+            onChange={handleInputChange}
+            id='question-input'
+            value={inputVal}
+            label='Message to Bot'
+            variant="outlined"
+          />
+
+          <Button
+            onClick={handleOnClick}
+            disabled={!inputVal}
+            sx={{
+              bgcolor: 'secondary.main',
+              marginLeft: '0.2rem',
+              width: '4rem'
+            }}
+          >
+            <Typography variant='body1'>Ask</Typography>
+          </Button>
+
+          <Button
+            onClick={handleHistoryChats}
+            sx={{
+              bgcolor: 'secondary.main',
+              marginLeft: '0.2rem',
+              width: '4rem'
+            }}
+          >
+            <Typography variant='body1'>Save</Typography>
+          </Button>
+        </Box>
 
 
       </Stack>
 
-     
+
     </div>
 
   )
