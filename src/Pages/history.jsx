@@ -42,7 +42,7 @@ const History = () => {
     if (isEqual(today, dayDate)) {
       return "Today's Chat";
     } else if (isEqual(today, add(dayDate, { days: 1 }))) {
-      return "Tomorrow's Chat";
+      return "Yesterday's Chat";
     } else {
       return format(dayDate, 'E, d LLL');
     }
