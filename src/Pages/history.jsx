@@ -26,7 +26,7 @@ const History = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const currentTheme = createTheme(isDarkMode ? darkTheme : lightTheme);
   const isMediumScreen = useMediaQuery(currentTheme.breakpoints.up('md'));
-  const {  toggleDrawer} = useOutletContext();
+  const {toggleDrawer} = useOutletContext();
 
 
   const items = ['All Ratings', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'];
@@ -53,6 +53,18 @@ const History = () => {
     setFilteredChats(fChats);
   }, [rating, historyChats]);
 
+  const handleClearHistory = (e)=>{
+    e.preventDefault();
+
+    const userConfirmed = window.confirm("Are you sure you want to clear conversation?");
+      if (userConfirmed) {
+          setFilteredChats([]);
+          localStorage.removeItem("chatHistory");
+      } else {
+          console.log("User canceled.");
+      }
+
+  }
   return (
     <Stack direction='column' justifyContent='space-between'>
 
@@ -71,7 +83,7 @@ const History = () => {
         {isDarkMode ? <Button onClick={toggleTheme}><DarkModeIcon /></Button> : <Button onClick={toggleTheme}><LightModeIcon /></Button>}
       </Stack>
 
-      <Box sx={{ display:'flex', flexDirection:'column',justifyContent:'center', textAlign:'center', minWidth: 120, margin: '3rem'}}>
+      <Box sx={{ display:'flex', flexDirection:`${isMediumScreen?'row':'column'}`,justifyContent:'center',alignItems:'center', textAlign:'center', minWidth: 120, margin: '3rem'}}>
 
 
       <Typography sx={{margin:'2rem'}} variant='h2'>Conversation History</Typography>
@@ -89,7 +101,11 @@ const History = () => {
               <MenuItem key={idx} value={idx}>{ele}</MenuItem>
             ))}
           </Select>
+
         </FormControl>
+
+        <Button onClick={handleClearHistory} sx={{bgcolor:"black", width:"12rem", margin:"1rem", border:"0.5rem",fontSize:"700"}}> Clear Conversation</Button>
+       
       </Box>
 
       <Stack sx={{ margin: '2rem' }} spacing={0}>
