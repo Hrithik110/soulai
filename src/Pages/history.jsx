@@ -20,7 +20,7 @@ const filterList = (list, rating) => {
 };
 
 const History = () => {
-  const { historyChats } = useOutletContext();
+  const { setHistoryChats,historyChats } = useOutletContext();
   const [rating, setRating] = useState(0);
   const [filteredChats, setFilteredChats] = useState([]);
   const { isDarkMode, toggleTheme } = useTheme();
@@ -58,7 +58,8 @@ const History = () => {
 
     const userConfirmed = window.confirm("Are you sure you want to clear conversation?");
       if (userConfirmed) {
-          setFilteredChats([]);
+        setHistoryChats([]);
+        setFilteredChats([]);
           localStorage.removeItem("chatHistory");
       } else {
           console.log("User canceled.");
