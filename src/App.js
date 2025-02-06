@@ -54,7 +54,7 @@ function App() {
 
     let answer = '';
     const res = jsonData.find((item)=>{
-      return item.question.toLowerCase() === question.toLowerCase();
+      return item.question.toLowerCase().includes(question.toLowerCase());
     });
 
     if(!res){
@@ -73,6 +73,7 @@ function App() {
   useEffect(()=>{
     getRandomItems(data, count);
   }, [isMediumScreen])
+
   const getRandomItems = (data, count) => {
     const shuffled = data.sort(() => 0.5 - Math.random()); 
     const selected = shuffled.slice(0, count); 

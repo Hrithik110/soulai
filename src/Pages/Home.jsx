@@ -68,11 +68,8 @@ const Home = () => {
 
   useEffect(() => {
     listRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
-  }, [scroll]);
-
-  useEffect(() => {
-    setScroll(prev => !prev);
-  }, [chats])
+  }, [chats]);
+  
   return (
     <div>
       <Stack
@@ -91,7 +88,7 @@ const Home = () => {
             sx={{ border: 'none', alignItems: 'center' }}
           >
             {!isMediumScreen && (
-              <MenuIcon sx={{ color: currentTheme.palette.primary.main, marginTop: '0.5rem', fontWeight: '700' }} onClick={toggleDrawer(true)} />
+              <MenuIcon sx={{ color: currentTheme.palette.primary.main, marginTop: '0.5rem', fontWeight: '700', position:'fixed' }} onClick={toggleDrawer(true)} />
             )}
             <Typography sx={{ margin: '0.5rem' }} variant='h1'>Boat AI</Typography>
 
@@ -132,6 +129,7 @@ const Home = () => {
           }}
         >
           <TextField
+          ref={listRef}
             sx={{
               flexGrow: 1,
               margin: '0.5rem'
